@@ -35,11 +35,7 @@ def main():
     addresses = {}
     chats = []
 
-    i = 0
-
     for child in root:
-        # if i > 50:
-            # break
         if not child.get("address") in addresses:
             addresses[child.get("address")] = 1
             current_chat = Chat(child.get("address"),
@@ -51,7 +47,6 @@ def main():
                 chat for chat in chats if chat.address == child.get("address")][0]
         current_chat.messages.append(Message(child.get("body"), child.get(
             "contact_name") if child.get("type") == "1" else "Me", child.get("readable_date")))
-        i += 1
 
 if __name__ == "__main__":
     main()
