@@ -12,16 +12,35 @@ class Chat():
 
 
 class Message():
-    def __init__(self, body, name, date):
+    def __init__(self, body, name, date, readable_date):
         self.body = body
         self.name = name
         self.date = date
+        self.readable_date = readable_date
 
     def __str__(self):
         return "{}: {}".format(self.name, self.body)
 
     def __repr__(self):
         return self.__str__()
+
+    def __lt__(self, other):
+        return self.date < other.date
+
+    def __le__(self, other):
+        return self.date <= other.date
+
+    def __gt__(self, other):
+        return self.date > other.date
+
+    def __ge__(self, other):
+        return self.date >= other.date
+
+    def __eq__(self, other):
+        return self.date == other.date
+
+    def __ne__(self, other):
+        return self.date != other.date
 
 
 def main():
@@ -46,7 +65,10 @@ def main():
             current_chat = [
                 chat for chat in chats if chat.address == child.get("contact_name")][0]
         current_chat.messages.append(Message(child.get("body"), child.get(
-            "contact_name") if child.get("type") == "1" else "Me", child.get("readable_date")))
+            "contact_name") if child.get("type") == "1" else "Me", child.get("date"), child.get("readable_date")))
+
+    for chat in chats:
+        chat.messages.sort() # TODO make type correct for MMS
 
     for chat in chats:
         f = open("./out/" + chat.contact_name + ".txt", 'w')
