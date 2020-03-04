@@ -4,6 +4,7 @@ import sys
 from Chat import Chat
 from Message import Message, SMSMessage, MMSMessage, MMSPart
 import xml.etree.ElementTree as ET
+import base64
 
 
 def main():
@@ -34,7 +35,15 @@ def main():
             parts = []
             for part in child[0]:
                 if part.get("seq") != "-1":
-                    parts.append(MMSPart(part.get("ct"), part.get("cl") if part.get("ct") != "text/plain" else part.get("text")))
+                    if part.get("ct") == "text/plain":
+                        parts.append(MMSPart(part.get("ct"), part.get("text")))
+                    elif part.get("ct")[:5] == "image":
+                        parts.append(MMSPart(part.get("ct"), part.get("cl")))
+                        f = open("./out/img/" + part.get("cl"), 'wb')
+                        f.write(base64.b64decode(part.get("data")))
+                        f.close()
+                    else:
+                        parts.append(MMSPart(part.get("ct"), part.get("cl")))
             current_chat.messages.append(MMSMessage(child.get("contact_name"), child.get("date"), child.get("readable_date"), parts))
         else:
             print("Neither SMS or MMS")
