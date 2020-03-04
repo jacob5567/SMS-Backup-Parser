@@ -36,15 +36,15 @@ def main():
     chats = []
 
     for child in root:
-        if not child.get("address") in addresses:
-            addresses[child.get("address")] = 1
-            current_chat = Chat(child.get("address"),
+        if not child.get("contact_name") in addresses:
+            addresses[child.get("contact_name")] = 1
+            current_chat = Chat(child.get("contact_name"),
                                 child.get("contact_name"))
             chats.append(current_chat)
         else:
-            addresses[child.get("address")] += 1
+            addresses[child.get("contact_name")] += 1
             current_chat = [
-                chat for chat in chats if chat.address == child.get("address")][0]
+                chat for chat in chats if chat.address == child.get("contact_name")][0]
         current_chat.messages.append(Message(child.get("body"), child.get(
             "contact_name") if child.get("type") == "1" else "Me", child.get("readable_date")))
 
@@ -53,6 +53,7 @@ def main():
         for m in chat.messages:
             f.write(str(m) + '\n')
         f.close()
+
 
 if __name__ == "__main__":
     main()
