@@ -28,7 +28,7 @@ def main():
     if len(sys.argv) != 2:
         print("Input format must match: python parse.py [input file]")
 
-    filename = sys.argv[1]
+    filename = "./in/" + sys.argv[1]
     tree = ET.parse(filename)
     root = tree.getroot()
 
