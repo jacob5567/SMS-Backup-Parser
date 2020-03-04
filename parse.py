@@ -48,5 +48,11 @@ def main():
         current_chat.messages.append(Message(child.get("body"), child.get(
             "contact_name") if child.get("type") == "1" else "Me", child.get("readable_date")))
 
+    for chat in chats:
+        f = open("./out/" + chat.contact_name + ".txt", 'w')
+        for m in chat.messages:
+            f.write(str(m) + '\n')
+        f.close()
+
 if __name__ == "__main__":
     main()
