@@ -2,8 +2,9 @@
 
 import sys
 from Chat import Chat
-from Message import Message
+from Message import Message, SMSMessage, MMSMessage, MMSPart
 import xml.etree.ElementTree as ET
+
 
 def main():
     if len(sys.argv) != 2:
@@ -27,16 +28,19 @@ def main():
             current_chat = [
                 chat for chat in chats if chat.address == child.get("contact_name")][0]
         if child.tag == "sms":
-            current_chat.messages.append(Message(child.get("body"), child.get(
-                "contact_name") if child.get("type") == "1" else "Me", child.get("date"), child.get("readable_date")))
-        elif child.tag == "mms":
-            pass  # TODO extend message class for SMS and MMS
-        # NOTE: base64 decode the data value of an MMS message to get the image
+            current_chat.messages.append(SMSMessage(child.get("contact_name") if child.get(
+                "type") == "1" else "Me", child.get("date"), child.get("readable_date"), child.get("body")))
+        elif child.tag == "mms":  # NOTE: base64 decode the data value of an MMS message to get the image
+            for part in child[0]:
+                parts = []
+                if part.get("seq") != "-1":
+                    parts.append(MMSPart(part.get("ct"), part.get("cl") if part.get("ct") != "text/plain" else part.get("text")))
+            current_chat.messages.append(MMSMessage(child.get("contact_name"), child.get("date"), child.get("readable_date"), parts))
         else:
-            print("neither sms or mms")
+            print("Neither SMS or MMS")
 
     for chat in chats:
-        chat.messages.sort() # TODO make type correct for MMS
+        chat.messages.sort()
 
     for chat in chats:
         f = open("./out/" + chat.contact_name + ".txt", 'w')
