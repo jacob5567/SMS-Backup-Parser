@@ -30,7 +30,8 @@ def main():
             current_chat.messages.append(Message(child.get("body"), child.get(
                 "contact_name") if child.get("type") == "1" else "Me", child.get("date"), child.get("readable_date")))
         elif child.tag == "mms":
-            pass # TODO extend message class for SMS and MMS
+            pass  # TODO extend message class for SMS and MMS
+        # NOTE: base64 decode the data value of an MMS message to get the image
         else:
             print("neither sms or mms")
 

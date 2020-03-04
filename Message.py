@@ -28,3 +28,9 @@ class Message():
 
     def __ne__(self, other):
         return self.date != other.date
+
+class SMS(Message):
+    pass
+
+class MMS(Message):
+    pass
