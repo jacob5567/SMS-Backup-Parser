@@ -64,8 +64,13 @@ def main():
             addresses[child.get("contact_name")] += 1
             current_chat = [
                 chat for chat in chats if chat.address == child.get("contact_name")][0]
-        current_chat.messages.append(Message(child.get("body"), child.get(
-            "contact_name") if child.get("type") == "1" else "Me", child.get("date"), child.get("readable_date")))
+        if child.tag == "sms":
+            current_chat.messages.append(Message(child.get("body"), child.get(
+                "contact_name") if child.get("type") == "1" else "Me", child.get("date"), child.get("readable_date")))
+        elif child.tag == "mms":
+            pass # TODO extend message class for SMS and MMS
+        else:
+            print("neither sms or mms")
 
     for chat in chats:
         chat.messages.sort() # TODO make type correct for MMS
