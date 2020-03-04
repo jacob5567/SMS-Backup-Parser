@@ -31,8 +31,8 @@ def main():
             current_chat.messages.append(SMSMessage(child.get("contact_name") if child.get(
                 "type") == "1" else "Me", child.get("date"), child.get("readable_date"), child.get("body")))
         elif child.tag == "mms":  # NOTE: base64 decode the data value of an MMS message to get the image
+            parts = []
             for part in child[0]:
-                parts = []
                 if part.get("seq") != "-1":
                     parts.append(MMSPart(part.get("ct"), part.get("cl") if part.get("ct") != "text/plain" else part.get("text")))
             current_chat.messages.append(MMSMessage(child.get("contact_name"), child.get("date"), child.get("readable_date"), parts))
