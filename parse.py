@@ -26,7 +26,8 @@ def main():
             chats.append(current_chat)
         else:
             addresses[child.get("contact_name")] += 1
-            current_chat = [chat for chat in chats if chat.contact_name == child.get("contact_name")][0]
+            current_chat = [
+                chat for chat in chats if chat.contact_name == child.get("contact_name")][0]
         if child.tag == "sms":
             current_chat.messages.append(SMSMessage(child.get("contact_name") if child.get(
                 "type") == "1" else "Me", child.get("date"), child.get("readable_date"), child.get("body")))
@@ -38,12 +39,14 @@ def main():
                         parts.append(MMSPart(part.get("ct"), part.get("text")))
                     elif part.get("ct")[:5] == "image":
                         parts.append(MMSPart(part.get("ct"), part.get("cl")))
-                        f = open("./out/img/{}_{}".format(child.get("date"), part.get("cl")), 'wb')
+                        f = open(
+                            "./out/img/{}_{}".format(child.get("date"), part.get("cl")), 'wb')
                         f.write(base64.b64decode(part.get("data")))
                         f.close()
                     else:
                         parts.append(MMSPart(part.get("ct"), part.get("cl")))
-            current_chat.messages.append(MMSMessage(child.get("contact_name"), child.get("date"), child.get("readable_date"), parts))
+            current_chat.messages.append(MMSMessage(child.get(
+                "contact_name"), child.get("date"), child.get("readable_date"), parts))
         else:
             print("Neither SMS or MMS")
 
