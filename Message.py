@@ -50,7 +50,7 @@ class MMSPart():
         self.data = data
 
     def __str__(self):
-        return "Type: {}; Data: {}".format(self.ct, self.data)
+        return "Type: {}; Data: {}".format(self.ct, self.data) if self.ct != "text/plain" else self.data
 
     def __repr__(self):
         return self.__str__()
