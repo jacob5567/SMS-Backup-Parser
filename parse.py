@@ -1,47 +1,9 @@
 # Jacob Faulk
 
 import sys
+from Chat import Chat
+from Message import Message
 import xml.etree.ElementTree as ET
-
-
-class Chat():
-    def __init__(self, address, contact_name):
-        self.address = address
-        self.contact_name = contact_name
-        self.messages = []
-
-
-class Message():
-    def __init__(self, body, name, date, readable_date):
-        self.body = body
-        self.name = name
-        self.date = date
-        self.readable_date = readable_date
-
-    def __str__(self):
-        return "{}: {}".format(self.name, self.body)
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __lt__(self, other):
-        return self.date < other.date
-
-    def __le__(self, other):
-        return self.date <= other.date
-
-    def __gt__(self, other):
-        return self.date > other.date
-
-    def __ge__(self, other):
-        return self.date >= other.date
-
-    def __eq__(self, other):
-        return self.date == other.date
-
-    def __ne__(self, other):
-        return self.date != other.date
-
 
 def main():
     if len(sys.argv) != 2:
