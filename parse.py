@@ -31,22 +31,25 @@ def main():
         if child.tag == "sms":
             current_chat.messages.append(SMSMessage(child.get("contact_name") if child.get(
                 "type") == "1" else "Me", child.get("date"), child.get("readable_date"), child.get("body")))
-        elif child.tag == "mms":  # NOTE: base64 decode the data value of an MMS message to get the image
-            parts = []
-            for part in child[0]:
-                if part.get("seq") != "-1":
-                    if part.get("ct") == "text/plain":
-                        parts.append(MMSPart(part.get("ct"), part.get("text")))
-                    elif part.get("ct")[:5] == "image":
-                        parts.append(MMSPart(part.get("ct"), part.get("cl")))
-                        f = open(
-                            "./out/img/{}_{}".format(child.get("date"), part.get("cl")), 'wb')
-                        f.write(base64.b64decode(part.get("data")))
-                        f.close()
-                    else:
-                        parts.append(MMSPart(part.get("ct"), part.get("cl")))
-            current_chat.messages.append(MMSMessage(child.get(
-                "contact_name") if child.get("msg_box") == "1" else "Me", child.get("date"), child.get("readable_date"), parts))
+        elif child.tag == "mms":
+            if len(child[1]) == 2:
+                parts = []
+                for part in child[0]:
+                    if part.get("seq") != "-1":
+                        if part.get("ct") == "text/plain":
+                            parts.append(MMSPart(part.get("ct"), part.get("text")))
+                        elif part.get("ct")[:5] == "image":
+                            parts.append(MMSPart(part.get("ct"), part.get("cl")))
+                            f = open(
+                                "./out/img/{}_{}".format(child.get("date"), part.get("cl")), 'wb')
+                            f.write(base64.b64decode(part.get("data")))
+                            f.close()
+                        else:
+                            parts.append(MMSPart(part.get("ct"), part.get("cl")))
+                current_chat.messages.append(MMSMessage(child.get(
+                    "contact_name") if child.get("msg_box") == "1" else "Me", child.get("date"), child.get("readable_date"), parts))
+            else:
+                print("This is a group message.")
         else:
             print("Neither SMS or MMS")
 

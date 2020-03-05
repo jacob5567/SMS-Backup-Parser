@@ -42,7 +42,7 @@ class MMSMessage(Message):
         self.parts = parts
 
     def __str__(self):
-        return "MMS MESSAGE:\n{}: {}".format(self.name, str(self.parts))
+        return "{}: {}".format(self.name, str(self.parts))
 
 class MMSPart():
     def __init__(self, ct, data):
