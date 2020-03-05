@@ -46,7 +46,7 @@ def main():
                     else:
                         parts.append(MMSPart(part.get("ct"), part.get("cl")))
             current_chat.messages.append(MMSMessage(child.get(
-                "contact_name"), child.get("date"), child.get("readable_date"), parts))
+                "contact_name") if child.get("msg_box") == "1" else "Me", child.get("date"), child.get("readable_date"), parts))
         else:
             print("Neither SMS or MMS")
 
