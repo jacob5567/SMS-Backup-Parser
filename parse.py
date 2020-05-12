@@ -57,9 +57,11 @@ def main():
         chat.messages.sort()
 
     for chat in chats:
-        f = open("./out/" + chat.contact_name + ".txt", 'w')
+        f = open("./out/" + chat.contact_name + ".md", 'w')
+        f.write("## " + chat.contact_name)
+        f.write("\n* * *\n")
         for m in chat.messages:
-            f.write(str(m) + '\n')
+            f.write(str(m) + '  \n')
         f.close()
 
 
