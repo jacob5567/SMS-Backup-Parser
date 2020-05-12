@@ -37,15 +37,15 @@ def main():
                 for part in child[0]:
                     if part.get("seq") != "-1":
                         if part.get("ct") == "text/plain":
-                            parts.append(MMSPart(part.get("ct"), part.get("text")))
+                            parts.append(MMSPart(part.get("ct"), part.get("text"), child.get("date")))
                         elif part.get("ct")[:5] == "image":
-                            parts.append(MMSPart(part.get("ct"), part.get("cl")))
+                            parts.append(MMSPart(part.get("ct"), part.get("cl"), child.get("date")))
                             f = open(
                                 "./out/img/{}_{}".format(child.get("date"), part.get("cl")), 'wb')
                             f.write(base64.b64decode(part.get("data")))
                             f.close()
                         else:
-                            parts.append(MMSPart(part.get("ct"), part.get("cl")))
+                            parts.append(MMSPart(part.get("ct"), part.get("cl"), child.get("date")))
                 current_chat.messages.append(MMSMessage(child.get(
                     "contact_name") if child.get("msg_box") == "1" else "Me", child.get("date"), child.get("readable_date"), parts))
             else:
@@ -57,9 +57,11 @@ def main():
         chat.messages.sort()
 
     for chat in chats:
-        f = open("./out/" + chat.contact_name + ".txt", 'w')
+        f = open("./out/" + chat.contact_name + ".md", 'w')
+        f.write("## " + chat.contact_name)
+        f.write("\n* * *\n")
         for m in chat.messages:
-            f.write(str(m) + '\n')
+            f.write(str(m) + '  \n')
         f.close()
 
 

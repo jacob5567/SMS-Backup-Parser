@@ -5,7 +5,7 @@ class Message():
         self.readable_date = readable_date
 
     def __str__(self):
-        return "{}: {}".format(self.name, "Blank Message")
+        return "**{}**: {}".format(self.name, "Blank Message")
 
     def __repr__(self):
         return self.__str__()
@@ -34,7 +34,7 @@ class SMSMessage(Message):
         self.body = body
 
     def __str__(self):
-        return "{}: {}".format(self.name, self.body)
+        return "**{}**: {}".format(self.name, self.body)
 
 class MMSMessage(Message):
     def __init__(self, name, date, readable_date, parts):
@@ -42,15 +42,16 @@ class MMSMessage(Message):
         self.parts = parts
 
     def __str__(self):
-        return "{}: {}".format(self.name, str(self.parts))
+        return "**{}**:  \n{}".format(self.name, str(self.parts[0]))
 
 class MMSPart():
-    def __init__(self, ct, data):
+    def __init__(self, ct, data, date):
         self.ct = ct
         self.data = data
+        self.date = date
 
     def __str__(self):
-        return "Type: {}; Data: {}".format(self.ct, self.data) if self.ct != "text/plain" else self.data
+        return "![Type: {}; Data: {}](img/{}_{})".format(self.ct, self.data, self.date, self.data) if self.ct != "text/plain" else self.data
 
     def __repr__(self):
         return self.__str__()
